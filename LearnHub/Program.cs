@@ -12,20 +12,15 @@ namespace LearnHub
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-        .AddEntityFrameworkStores<ApplicationDbContext>()
-        .AddDefaultUI()
-        .AddDefaultTokenProviders();
-
+                            .AddEntityFrameworkStores<ApplicationDbContext>()
+                            .AddDefaultUI()
+                            .AddDefaultTokenProviders();
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
-       
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -36,18 +31,14 @@ namespace LearnHub
             {
                 app.UseExceptionHandler("/Category/Error");
             }
+
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Category}/{action=Index}/{id?}")
-                .WithStaticAssets();
-            app.MapRazorPages()
-               .WithStaticAssets();
-
+                pattern: "{controller=Home}/{action=Index}/{id?}").WithStaticAssets();
+            app.MapRazorPages().WithStaticAssets();
             app.Run();
         }
     }

@@ -371,6 +371,9 @@
                         <a class="nav-link" href="/">Home</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="/Category">Tracks</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/Course">Courses</a>
                     </li>
                     <li class="nav-item">
@@ -384,8 +387,6 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav">
-              
-            
                     @if (User.IsInRole ("Admin"))
                     {
                         <li class="nav-item dropdown">
@@ -400,8 +401,6 @@
                             </ul>
                         </li>
                     }
-
-                
                     <!-- Login Partial -->
                     <partial name="_LoginPartial" />
                 </ul>
@@ -409,15 +408,13 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
-    @*   <main style="margin-top: 76px;">
-        @RenderBody()
-    </main> *@
     <div class="container my-5">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
-    </div><!-- Footer -->
+    </div>
+
+    <!-- Footer -->
     <footer class="footer bg-dark text-light pt-5 pb-3">
         <div class="container">
             <div class="row justify-content-between align-items-start">
