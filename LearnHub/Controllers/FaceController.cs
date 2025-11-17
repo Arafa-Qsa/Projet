@@ -1,13 +1,14 @@
 using LearnHub.Data;
 using LearnHub.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace LearnHub.Controllers
 {
-    public class HomeController : Controller
+    public class FaceController : Controller
     {
         private readonly ApplicationDbContext db;
-        public HomeController(ApplicationDbContext _db)
+        public FaceController(ApplicationDbContext _db)
         {
             db = _db;
         }

@@ -37,7 +37,7 @@ namespace LearnHub
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}").WithStaticAssets();
+                pattern: "{controller=Face}/{action=Index}/{id?}").WithStaticAssets();
             app.MapRazorPages().WithStaticAssets();
             app.Run();
         }
