@@ -3,6 +3,7 @@ using System;
 using LearnHub.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearnHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251124234541_FinalSchemaBuild")]
+    partial class FinalSchemaBuild
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -137,6 +140,9 @@ namespace LearnHub.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("InstructorApplicationId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("IsApproved")
                         .HasColumnType("INTEGER");
 
@@ -162,6 +168,8 @@ namespace LearnHub.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("InstructorApplicationId");
+
                     b.ToTable("Courses");
                 });
 
@@ -181,6 +189,9 @@ namespace LearnHub.Migrations
                     b.Property<DateTime>("EnrolledAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("InstructorApplicationId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int?>("Rating")
                         .HasColumnType("INTEGER");
 
@@ -189,6 +200,8 @@ namespace LearnHub.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("CourseId");
+
+                    b.HasIndex("InstructorApplicationId");
 
                     b.ToTable("Enrollments");
                 });
@@ -203,6 +216,7 @@ namespace LearnHub.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ApplicationUserId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Bio")
@@ -215,12 +229,18 @@ namespace LearnHub.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsApproved")
+                    b.Property<int?>("InstructorApplicationId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("IsApproved")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("InstructorApplicationId");
 
                     b.ToTable("InstructorApplications");
                 });
@@ -399,6 +419,10 @@ namespace LearnHub.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("LearnHub.Models.InstructorApplication", null)
+                        .WithMany("Courses")
+                        .HasForeignKey("InstructorApplicationId");
+
                     b.Navigation("ApplicationUser");
 
                     b.Navigation("Category");
@@ -418,6 +442,10 @@ namespace LearnHub.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("LearnHub.Models.InstructorApplication", null)
+                        .WithMany("Enrollments")
+                        .HasForeignKey("InstructorApplicationId");
+
                     b.Navigation("ApplicationUser");
 
                     b.Navigation("Course");
@@ -427,7 +455,13 @@ namespace LearnHub.Migrations
                 {
                     b.HasOne("LearnHub.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LearnHub.Models.InstructorApplication", null)
+                        .WithMany("InstructorApplications")
+                        .HasForeignKey("InstructorApplicationId");
 
                     b.Navigation("ApplicationUser");
                 });
@@ -511,6 +545,15 @@ namespace LearnHub.Migrations
                     b.Navigation("Enrollments");
 
                     b.Navigation("Lessons");
+                });
+
+            modelBuilder.Entity("LearnHub.Models.InstructorApplication", b =>
+                {
+                    b.Navigation("Courses");
+
+                    b.Navigation("Enrollments");
+
+                    b.Navigation("InstructorApplications");
                 });
 #pragma warning restore 612, 618
         }

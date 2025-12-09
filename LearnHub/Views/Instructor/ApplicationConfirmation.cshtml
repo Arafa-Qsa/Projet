@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Application Submitted";
+}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-5 text-center">
+                    <i class="fas fa-check-circle text-success mb-4" style="font-size: 4rem;"></i>
+                    <h2 class="card-title text-success mb-3">Application Submitted Successfully!</h2>
+
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <p class="card-text lead">
+                            @TempData["SuccessMessage"]
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="card-text lead">
+                            Thank you for your interest in joining our instructor team.
+                            Your application is currently under review. We will contact you within 5-7 business days.
+                        </p>
+                    }
+
+                    <hr class="my-4">
+
+                    <a href="/" class="btn btn-primary px-4">Go to Homepage</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+﻿@model IEnumerable<LearnHub.Models.InstructorApplication>
+@{
+    ViewData["Title"] = "Review Applications";
+}
+
+<h1>Pending Instructor Applications</h1>
+<hr />
+
+@if (Model.Any())
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Applicant Email</th>
+                <th>Expertise</th>
+                <th>Bio</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var application in Model)
+            {
+                <tr>
+                    <td>@application.ApplicationUser.Email</td>
+                    <td>@application.Expertise</td>
+                    <td>@application.Bio.Substring(0, Math.Min(application.Bio.Length, 70))...</td>
+                    <td>@application.ApplicationDate.ToShortDateString()</td>
+                    <td>
+                        <form asp-action="Approve" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="@application.Id" />
+                            <button type="submit" class="btn btn-success btn-sm"
+                                    onclick="return confirm('Are you sure you want to approve this application?');">
+                                Approve
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-success">
+        <p>No pending applications at the moment.</p>
+    </div>
+}

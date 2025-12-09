@@ -1,0 +1,32 @@
+﻿@model IEnumerable<LearnHub.Models.InstructorApplication>
+@{
+    ViewData["Title"] = "Our Instructors";
+}
+
+<h1>Our Instructors</h1>
+<hr />
+
+@if (Model != null && Model.Any())
+{
+    <div class="row">
+        @foreach (var application in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">@application.ApplicationUser.Email</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Expertise: @application.Expertise</h6>
+                        <p class="card-text">@application.Bio</p>
+                        <a href="#" class="btn btn-sm btn-primary">View Profile</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        <p>No instructors are available yet.</p>
+    </div>
+}

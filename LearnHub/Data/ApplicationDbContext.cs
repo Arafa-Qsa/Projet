@@ -17,7 +17,7 @@ namespace LearnHub.Data
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
-
+        public DbSet<InstructorApplication> InstructorApplications { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -26,7 +26,18 @@ namespace LearnHub.Data
                 Id = "1", 
                 Name = "Admin",
                 NormalizedName = "ADMIN"
+
             });
+            
+            // في ملف ApplicationDbContext.cs داخل دالة OnModelCreating
+
+            builder.Entity<InstructorApplication>()
+                   .HasOne(a => a.ApplicationUser)
+                   .WithMany()
+                   .HasForeignKey(a => a.ApplicationUserId)
+                   .IsRequired(false); // 🛑 هذا هو التعديل الحاسم
+
+           
 
             builder.Entity<Course>()
                 .HasOne(c => c.ApplicationUser)

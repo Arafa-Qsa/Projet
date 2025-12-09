@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LearnHub.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialSqlite : Migration
+    public partial class FinalSchemaBuild : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -176,6 +176,35 @@ namespace LearnHub.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "InstructorApplications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Expertise = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
+                    Bio = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: false),
+                    ApplicationDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    IsApproved = table.Column<string>(type: "TEXT", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "TEXT", nullable: false),
+                    InstructorApplicationId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InstructorApplications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_InstructorApplications_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_InstructorApplications_InstructorApplications_InstructorApplicationId",
+                        column: x => x.InstructorApplicationId,
+                        principalTable: "InstructorApplications",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Courses",
                 columns: table => new
                 {
@@ -190,7 +219,8 @@ namespace LearnHub.Migrations
                     NumberOfLearnears = table.Column<int>(type: "INTEGER", nullable: false),
                     IsApproved = table.Column<bool>(type: "INTEGER", nullable: false),
                     CategoryId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ApplicationUserId = table.Column<string>(type: "TEXT", nullable: false)
+                    ApplicationUserId = table.Column<string>(type: "TEXT", nullable: false),
+                    InstructorApplicationId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -207,6 +237,11 @@ namespace LearnHub.Migrations
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Courses_InstructorApplications_InstructorApplicationId",
+                        column: x => x.InstructorApplicationId,
+                        principalTable: "InstructorApplications",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -218,7 +253,8 @@ namespace LearnHub.Migrations
                     EnrolledAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Rating = table.Column<int>(type: "INTEGER", nullable: true),
                     ApplicationUserId = table.Column<string>(type: "TEXT", nullable: false),
-                    CourseId = table.Column<int>(type: "INTEGER", nullable: false)
+                    CourseId = table.Column<int>(type: "INTEGER", nullable: false),
+                    InstructorApplicationId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -235,6 +271,11 @@ namespace LearnHub.Migrations
                         principalTable: "Courses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Enrollments_InstructorApplications_InstructorApplicationId",
+                        column: x => x.InstructorApplicationId,
+                        principalTable: "InstructorApplications",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -311,6 +352,11 @@ namespace LearnHub.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Courses_InstructorApplicationId",
+                table: "Courses",
+                column: "InstructorApplicationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Enrollments_ApplicationUserId",
                 table: "Enrollments",
                 column: "ApplicationUserId");
@@ -319,6 +365,21 @@ namespace LearnHub.Migrations
                 name: "IX_Enrollments_CourseId",
                 table: "Enrollments",
                 column: "CourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Enrollments_InstructorApplicationId",
+                table: "Enrollments",
+                column: "InstructorApplicationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InstructorApplications_ApplicationUserId",
+                table: "InstructorApplications",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InstructorApplications_InstructorApplicationId",
+                table: "InstructorApplications",
+                column: "InstructorApplicationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Lessons_CourseId",
@@ -357,10 +418,13 @@ namespace LearnHub.Migrations
                 name: "Courses");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "InstructorApplications");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

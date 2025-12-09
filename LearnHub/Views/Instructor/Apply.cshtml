@@ -1,0 +1,67 @@
+﻿@model LearnHub.Models.ViewModels.InstructorApplicationViewModel
+@{
+    ViewData["Title"] = "Instructor Registration";
+}
+
+<div class="container my-5">
+    <div class="row">
+
+        <div class="col-md-6">
+            <h3 class="mb-4">Our Current Instructors</h3>
+
+            @if (Model.ApprovedInstructors != null && Model.ApprovedInstructors.Any())
+            {
+                <ul class="list-group shadow-sm">
+                    @foreach (var instructor in Model.ApprovedInstructors)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @((instructor.ApplicationUser?.Email ?? "Expert") + " (Approved)")
+                            <span class="badge bg-primary rounded-pill">@instructor.Expertise</span>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    <p class="mb-0">No instructors have been approved yet. Be the first to join!</p>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-6">
+            <h2 class="text-center mb-4">Join Our Instructor Team!</h2>
+
+            <p class="text-center text-muted">
+                Complete the form below to apply and start sharing your knowledge.
+            </p>
+
+            <form asp-action="Apply" method="post">
+                @* 🛑 لا تنسى الـ Anti-Forgery Token *@
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Application.Expertise" class="form-label">Area of Expertise (e.g., Web Development)</label>
+                    <input asp-for="Application.Expertise" class="form-control" />
+                    <span asp-validation-for="Application.Expertise" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Application.Bio" class="form-label">Short Bio / Teaching Experience</label>
+                    <textarea asp-for="Application.Bio" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="Application.Bio" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Submit Application</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

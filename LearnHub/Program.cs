@@ -1,4 +1,4 @@
-using LearnHub.Data;
+﻿using LearnHub.Data;
 using LearnHub.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +14,7 @@ namespace LearnHub
             // Add services to the container.
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
                             .AddEntityFrameworkStores<ApplicationDbContext>()
                             .AddDefaultUI()
                             .AddDefaultTokenProviders();
@@ -34,11 +34,11 @@ namespace LearnHub
 
             app.UseRouting();
             app.UseAuthorization();
-            app.MapStaticAssets();
+            // الكود الصحيح الذي سيعمل
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Face}/{action=Index}/{id?}").WithStaticAssets();
-            app.MapRazorPages().WithStaticAssets();
+                pattern: "{controller=Face}/{action=Index}/{id?}");
+            app.MapRazorPages();
             app.Run();
         }
     }
